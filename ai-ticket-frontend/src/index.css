@@ -59,6 +59,14 @@
   } */
   body {
     background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
 
   }
+
+  input, button {
+    transition: all 0.2s ease-in-out;
+  }
+  
 }

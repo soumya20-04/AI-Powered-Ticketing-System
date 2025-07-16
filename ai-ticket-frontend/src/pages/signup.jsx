@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -28,70 +29,93 @@ export default function SignupPage() {
       if (!res.ok) {
         setError(data.error || "Signup failed");
         return;
-      }else{
+      } else {
         alert("Signup successful!");
-        navigate("/login"); 
+        navigate("/login");
       }
 
       // Save token & user in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
-       navigate("/login"); // redirect to login page
+      navigate("/tickets");
     } catch (err) {
       setError("Something went wrong");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold mb-6">Create Account</h2>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+    <div className="flex items-center justify-center min-h-screen px-4 bg-background text-foreground transition-all">
+      <Card className="w-full max-w-md border border-border rounded-2xl bg-card shadow-xl animate-in fade-in slide-in-from-bottom duration-500">
+        <CardContent className="p-8 space-y-6">
+          <div className="text-center space-y-1">
+            <h2 className="text-3xl font-extrabold">🚀 Create Account</h2>
+            <p className="text-sm text-muted-foreground">Join our support platform today!</p>
+          </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          {error && (
+            <div className="text-red-500 text-sm bg-red-100 border border-red-300 p-2 rounded-md text-center">
+              {error}
+            </div>
+          )}
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                className="w-full px-4 py-2 rounded-md border border-border bg-popover text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Skills (comma separated)"
-          className="w-full p-2 border rounded"
-          value={skills}
-          onChange={(e) => setSkills(e.target.value)}
-        />
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter secure password"
+                className="w-full px-4 py-2 rounded-md border border-border bg-popover text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Sign Up
-        </button>
-      </form>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="skills">Skills</label>
+              <input
+                id="skills"
+                type="text"
+                placeholder="e.g. JavaScript, React"
+                className="w-full px-4 py-2 rounded-md border border-border bg-popover text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+              />
+            </div>
 
-      <p className="mt-4 text-sm text-center">
-        Already have an account?{" "}
-        <span
-          onClick={() => navigate("/login")}
-          className="text-blue-600 hover:underline cursor-pointer"
-        >
-          Login
-        </span>
-      </p>
+            <button
+              type="submit"
+              className="w-full py-2 px-4 rounded-md font-semibold text-white bg-primary hover:bg-primary/80 transition-all"
+            >
+              Sign Up
+            </button>
+          </form>
+
+          <p className="text-sm text-center text-muted-foreground">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-primary font-medium hover:underline cursor-pointer"
+            >
+              Login
+            </span>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

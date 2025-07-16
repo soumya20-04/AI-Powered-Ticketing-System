@@ -2,11 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 
-function login() {
+function Login() {
   const [form, setForm] = React.useState({ email: "", password: "" });
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
+  // Handle input change
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -14,28 +15,30 @@ function login() {
     });
   };
 
+  // Handle form submission
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      const response = await fetch(
-`http://localhost:3000/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
       const data = await response.json();
+
       if (response.ok) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        alert("Login Successfull")
-        navigate("/");
+
+        alert("Login Successful");
+        navigate("/tickets");
       } else {
-        alert(data.message||"Login Failed");
+        alert(data.message || "Login Failed");
       }
     } catch (error) {
       console.error("Error during login", error);
@@ -45,12 +48,19 @@ function login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
-      <Card className="w-full max-w-md p-6 shadow-md rounded-xl">
+    <div className="flex items-center justify-center min-h-screen w-full bg-gradient-to-br from-slate-100 to-slate-200">
+      <Card className="w-full max-w-md p-6 sm:p-8 bg-white rounded-xl shadow-xl border border-slate-200 animate-in fade-in slide-in-from-bottom duration-700">
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-6">
-            <h1 className="text-2xl font-bold text-center">Login</h1>
+            {/* Title */}
+            <h1 className="text-3xl font-bold text-center text-gray-800">
+              Login
+            </h1>
+            <p className="text-center text-sm text-gray-500">
+              Please login to your account
+            </p>
 
+            {/* Email Input */}
             <div>
               <label
                 htmlFor="email"
@@ -65,10 +75,12 @@ function login() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
 
+            {/* Password Input */}
             <div>
               <label
                 htmlFor="password"
@@ -83,14 +95,16 @@ function login() {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your password"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 rounded-md border-2 border-black-500  p-2 ${
+              className={`w-full py-2 px-4 rounded-md font-semibold text-white text-center transition-all duration-200 ${
                 loading
                   ? "bg-blue-300 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
@@ -105,5 +119,4 @@ function login() {
   );
 }
 
-export default login;
-
+export default Login;
